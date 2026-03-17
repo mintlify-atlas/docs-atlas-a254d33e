@@ -1,0 +1,50 @@
+{
+  "projectType": "cli-tool",
+  "projectName": "NexPhisher",
+  "projectDescription": "A Bash-based advanced phishing tool with 30+ login page templates and multiple port forwarding options for Linux and Termux.",
+  "theme": "aspen",
+  "primaryColor": "#848c8e",
+  "lightColor": "#11161e",
+  "darkColor": "#cfd0d2",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "installation", "quickstart"]
+          },
+          {
+            "group": "Usage",
+            "pages": ["usage/running-the-tool", "usage/selecting-a-template", "usage/port-forwarding"]
+          },
+          {
+            "group": "Guides",
+            "pages": ["guides/linux-setup", "guides/termux-setup", "guides/tunneling-options"]
+          },
+          {
+            "group": "Reference",
+            "pages": ["reference/templates", "reference/commands", "reference/troubleshooting"]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "30+ phishing page templates for popular platforms (Facebook, Instagram, Google, Netflix, etc.)",
+    "5 port forwarding/tunneling options: LocalHost, Ngrok, Serveo, LocalXpose, LocalHostRun",
+    "Supports Linux (apt) and Termux (Android) environments",
+    "Automatic credential capture and logging to files",
+    "Victim IP address capture and logging",
+    "Custom subdomain support for Serveo and LocalXpose tunnels",
+    "Multiple template variants per platform (e.g., Facebook: Traditional, Messenger, Voting Poll, Security)"
+  ],
+  "publicApiSurface": [
+    "bash setup — Install dependencies and set up environment (Linux)",
+    "bash tmux_setup — Install dependencies and set up environment (Termux/Android)",
+    "bash nexphisher — Launch the interactive phishing tool menu",
+    "Template options: facebook, instagram, google, microsoft, netflix, paypal, steam, twitter, playstation, github, twitch, pinterest, snapchat, linkedin, ebay, dropbox, protonmail, spotify, reddit, adobe, deviantart, badoo, origin, cryptocoinsniper, yahoo, wordpress, yandex, stackoverflow, vk, xbox",
+    "Tunnel options: localhost (127.0.0.1:5555), ngrok, serveo, localxpose, localhostrun"
+  ]
+}
