@@ -1,0 +1,73 @@
+---
+title: "Running the tool"
+description: "How to start NexPhisher, what happens at startup, and how to exit cleanly."
+---
+
+## Starting the tool
+
+From inside the `nexphisher` directory, run:
+
+```bash
+bash nexphisher
+```
+
+<Info>
+  You must run this from the repository root — the directory that contains the `nexphisher` script, `.htr/`, and `.Modules/` directories.
+</Info>
+
+## What happens at startup
+
+<Steps>
+  <Step title="Signal handlers are registered">
+    The script registers a trap for `CTRL+C` (`SIGINT`) and `SIGTSTP`. Both signals invoke the `user_interrupt` function, which stops all background processes before exiting.
+  </Step>
+  <Step title="Background processes are stopped">
+    The `stop()` function runs immediately on startup. It kills any leftover `ngrok`, `php`, and `ssh` tunnel processes from a previous session, ensuring a clean start.
+  </Step>
+  <Step title="Requirements are checked">
+    The `reqs()` function verifies that the following binaries and directories are present:
+
+    | Requirement | Type |
+    |---|---|
+    | `php` | Binary |
+    | `curl` | Binary |
+    | `ssh` | Binary |
+    | `unzip` | Binary |
+    | `.htr/` | Directory |
+    | `.Modules/` | Directory |
+
+    If any required item is missing, the tool exits with:
+
+    ```text
+    Packages are not Installed ! type bash setup
+    ```
+
+    Run `bash setup` (Linux) or `bash tmux_setup` (Termux) to install missing dependencies. See [Installation](/installation).
+  </Step>
+  <Step title="Banner is displayed">
+    The `banner()` function prints the ASCII art header to the terminal:
+
+    ```text
+    ███╗   ██╗███████╗██╗  ██╗██████╗ ██╗  ██╗██╗███████╗██╗  ██╗███████╗██████╗
+    ████╗  ██║██╔════╝╚██╗██╔╝██╔══██╗██║  ██║██║██╔════╝██║  ██║██╔════╝██╔══██╗
+    ██╔██╗ ██║█████╗   ╚███╔╝ ██████╔╝███████║██║███████╗███████║█████╗  ██████╔╝
+    ██║╚██╗██║██╔══╝   ██╔██╗ ██╔═══╝ ██╔══██║██║╚════██║██╔══██║██╔══╝  ██╔══██╗
+    ██║ ╚████║███████╗██╔╝ ██╗██║     ██║  ██║██║███████║██║  ██║███████╗██║  ██║
+    ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+    ```
+  </Step>
+  <Step title="Interactive menu is displayed">
+    The `menu()` function renders the platform selection menu. From here you choose which phishing template to deploy. See [Selecting a template](/usage/selecting-a-template).
+  </Step>
+</Steps>
+
+## Exiting the tool
+
+There are two ways to exit NexPhisher cleanly:
+
+- **Option `00`** — select `00` from any menu prompt to exit gracefully.
+- **`CTRL+C`** — press `CTRL+C` at any time. The registered signal trap invokes `user_interrupt`, which calls `stop()` to kill background processes before the script terminates.
+
+<Note>
+  The `stop()` function is called both on startup and on exit. This ensures stale `ngrok`, `php`, and `ssh` processes do not accumulate across sessions.
+</Note>

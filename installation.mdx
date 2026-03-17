@@ -1,0 +1,111 @@
+---
+title: "Installation"
+description: "Install NexPhisher and its dependencies on Linux or Android (Termux)."
+---
+
+## Prerequisites
+
+Before installing NexPhisher, make sure the following are available in your environment:
+
+| Requirement | Purpose |
+|---|---|
+| `git` | Clone the repository |
+| `apt` (Linux) or Termux package manager | Install dependencies |
+| Internet access | Download binaries during setup |
+
+<Warning>
+  On Linux, the setup script uses `apt-get` to install packages. You need **root or sudo access** to run it. On Termux, no root is required.
+</Warning>
+
+## Installation
+
+<Tabs>
+  <Tab title="Linux">
+    <Steps>
+      <Step title="Update package lists and install git">
+        ```bash
+        apt update && apt install git -y
+        ```
+      </Step>
+      <Step title="Clone the repository">
+        ```bash
+        git clone git://github.com/htr-tech/nexphisher.git
+        ```
+      </Step>
+      <Step title="Enter the project directory">
+        ```bash
+        cd nexphisher
+        ```
+      </Step>
+      <Step title="Run the setup script">
+        ```bash
+        bash setup
+        ```
+
+        The setup script installs the following packages via `apt-get`:
+
+        - `ssh` and `openssh-server`
+        - `curl`
+        - `php`
+        - `unzip`
+
+        It then:
+
+        1. Creates the `.htr/` directory for internal state
+        2. Creates the `logs/` directory for captured credentials
+        3. Extracts `Modules.zip` which contains all phishing page templates into `.Modules/`
+        4. Downloads the correct `ngrok` binary for your architecture (ARM or x86)
+        5. Downloads the `loclx` binary (LocalXpose)
+        6. Makes the `nexphisher` script executable
+      </Step>
+    </Steps>
+
+    ### Single-command install
+
+    You can run all of the above steps with one command:
+
+    ```bash
+    apt update ; apt install git -y ; git clone git://github.com/htr-tech/nexphisher.git ; cd nexphisher ; bash setup
+    ```
+  </Tab>
+  <Tab title="Termux (Android)">
+    <Steps>
+      <Step title="Install git in Termux">
+        ```bash
+        pkg update && pkg install git -y
+        ```
+      </Step>
+      <Step title="Clone the repository">
+        ```bash
+        git clone git://github.com/htr-tech/nexphisher.git
+        ```
+      </Step>
+      <Step title="Enter the project directory">
+        ```bash
+        cd nexphisher
+        ```
+      </Step>
+      <Step title="Run the Termux setup script">
+        ```bash
+        bash tmux_setup
+        ```
+
+        Use `tmux_setup` instead of `setup` on Termux. It installs the same dependencies using the Termux package manager rather than `apt-get`, and does not require root access.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## What gets installed
+
+After setup completes, your project directory contains:
+
+- **`.htr/`** — internal directory used by NexPhisher at runtime
+- **`.Modules/`** — extracted phishing page templates (30+ platforms)
+- **`logs/`** — directory where captured credentials are written
+- **`ngrok`** — tunneling binary for Ngrok support
+- **`loclx`** — tunneling binary for LocalXpose support
+
+## Next step
+
+Once setup completes, continue to the [Quickstart](/quickstart) to run the tool for the first time.

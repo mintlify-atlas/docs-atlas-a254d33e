@@ -1,0 +1,296 @@
+---
+title: "Troubleshooting"
+description: "Solutions to common errors in NexPhisher, including missing packages, directory errors, ngrok failures, and credential capture issues."
+---
+
+## Before you start
+
+Verify the following before investigating a specific error:
+
+- You are running all commands from the repository root — the directory that contains the `nexphisher` script, `.htr/`, and `.Modules/`.
+- You have run the correct setup script for your environment (`bash setup` on Linux, `bash tmux_setup` on Termux).
+- Your internet connection is active if you are using a tunneling option other than LocalHost.
+- You are running on a supported environment: Debian/Ubuntu-based Linux or Termux on Android.
+
+## Error messages
+
+<AccordionGroup>
+  <Accordion title='"Packages are not Installed ! type bash setup"' icon="triangle-alert">
+    **Cause:** One or more required binaries — `php`, `curl`, `ssh`, or `unzip` — are not found on `PATH`.
+
+    **Fix:**
+
+    <Steps>
+      <Step title="Run the setup script for your environment">
+        On Linux:
+
+        ```bash
+        bash setup
+        ```
+
+        On Termux:
+
+        ```bash
+        bash tmux_setup
+        ```
+      </Step>
+      <Step title="Verify the binaries are available">
+        After setup completes, confirm each binary is accessible:
+
+        ```bash
+        php --version
+        curl --version
+        ssh -V
+        unzip -v
+        ```
+
+        If any command returns `command not found`, install the missing package manually.
+
+        On Linux:
+
+        ```bash
+        sudo apt install php curl openssh-client unzip
+        ```
+
+        On Termux:
+
+        ```bash
+        pkg install php curl openssh unzip
+        ```
+      </Step>
+      <Step title="Re-run NexPhisher">
+        ```bash
+        bash nexphisher
+        ```
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion title='"Packages are not Found ! type bash setup"' icon="triangle-alert">
+    **Cause:** The `.htr/` or `.Modules/` directories are missing from the repository root. These directories are created and populated by the setup scripts.
+
+    **Fix:**
+
+    <Steps>
+      <Step title="Confirm you are in the repository root">
+        ```bash
+        ls -la
+        ```
+
+        You should see both `.htr/` and `.Modules/` in the output. If they are absent, the setup script has not been run or did not complete successfully.
+      </Step>
+      <Step title="Run the setup script">
+        On Linux:
+
+        ```bash
+        bash setup
+        ```
+
+        On Termux:
+
+        ```bash
+        bash tmux_setup
+        ```
+      </Step>
+      <Step title="Verify the directories exist">
+        ```bash
+        ls -la .htr/ .Modules/
+        ```
+
+        Both directories should be listed with contents.
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion title="ngrok not found or not working" icon="globe">
+    **Cause:** The `ngrok` binary at `.htr/ngrok` is missing, was not downloaded correctly, or lacks execute permissions.
+
+    **Fix:**
+
+    <Steps>
+      <Step title="Check if the binary exists and is executable">
+        ```bash
+        ls -lh .htr/ngrok
+        .htr/ngrok version
+        ```
+
+        If the file is missing or the version command fails, re-run the setup script:
+
+        ```bash
+        bash setup
+        ```
+      </Step>
+      <Step title="If the setup script cannot install ngrok, install it manually">
+        Download the appropriate release for your system from [ngrok.com/download](https://ngrok.com/download), extract it, and place the binary at `.htr/ngrok`:
+
+        ```bash
+        chmod +x .htr/ngrok
+        .htr/ngrok version
+        ```
+      </Step>
+      <Step title="Authenticate ngrok with your authtoken">
+        A free ngrok account is required for sustained use. Retrieve your authtoken from the ngrok dashboard and run:
+
+        ```bash
+        .htr/ngrok authtoken YOUR_AUTH_TOKEN
+        ```
+      </Step>
+    </Steps>
+
+    <Info>
+      If you do not want to create a ngrok account, use the **LocalHostRun** tunnel option (option `5`), which requires only a standard SSH client.
+    </Info>
+  </Accordion>
+
+  <Accordion title="loclx not found or not working" icon="arrow-up-right">
+    **Cause:** The `loclx` binary at `.htr/loclx` is missing, was not downloaded correctly, or lacks execute permissions.
+
+    **Fix:**
+
+    <Steps>
+      <Step title="Check if the binary exists and is executable">
+        ```bash
+        ls -lh .htr/loclx
+        .htr/loclx version
+        ```
+
+        If the file is missing or the version command fails, re-run the setup script:
+
+        ```bash
+        bash setup
+        ```
+      </Step>
+      <Step title="If the setup script cannot install loclx, install it manually">
+        Download the appropriate release from the LocalXpose website, extract it, and place the binary at `.htr/loclx`:
+
+        ```bash
+        chmod +x .htr/loclx
+        .htr/loclx version
+        ```
+      </Step>
+      <Step title="Authenticate loclx with your account">
+        A LocalXpose account is required. Log in with:
+
+        ```bash
+        .htr/loclx account login
+        ```
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion title="Ngrok URL not showing in the terminal" icon="link">
+    **Cause:** NexPhisher waits 7 seconds after starting ngrok before polling the local API at `http://127.0.0.1:4040/api/tunnels`. If ngrok has not fully started within that window, the URL extraction fails and nothing is displayed.
+
+    **Fix:**
+
+    <Steps>
+      <Step title="Check if ngrok is running">
+        In a separate terminal, check whether the ngrok process is active:
+
+        ```bash
+        pgrep -a ngrok
+        ```
+
+        If no output appears, ngrok did not start. Verify the binary exists and is executable as described in the "ngrok not found" section above.
+      </Step>
+      <Step title="Check the ngrok API manually">
+        If ngrok is running, try querying the API yourself:
+
+        ```bash
+        curl http://127.0.0.1:4040/api/tunnels
+        ```
+
+        If this returns a JSON response with a `public_url` field, ngrok is working. The URL was generated — NexPhisher polled too early.
+      </Step>
+      <Step title="Restart NexPhisher and try again">
+        Press `CTRL+C` to exit, then run `bash nexphisher` again and select the Ngrok tunnel option. The timing issue is intermittent.
+      </Step>
+      <Step title="Switch to an alternative tunnel">
+        If the URL consistently fails to appear, use **LocalHostRun** (option `5`) as an alternative. It prints the public URL directly in the terminal output from the SSH session.
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion title="No credentials captured" icon="key">
+    **Cause:** The victim has not visited the phishing page, has not submitted the login form, or the template's form submission handler is not writing to the log file.
+
+    **Fix:**
+
+    <Steps>
+      <Step title="Confirm the PHP server is running">
+        ```bash
+        pgrep -a php
+        ```
+
+        You should see a `php -S` process listening on the expected port (5555, 4142, or 4545 depending on tunnel method). If no PHP process is running, restart NexPhisher.
+      </Step>
+      <Step title="Confirm the public URL is accessible">
+        Open the public URL in a browser on a different device or network. The phishing page should load.
+
+        - For **LocalHost**, use `http://127.0.0.1:5555` — the page is only accessible on the same machine.
+        - For all other tunnels, use the public URL printed in the terminal.
+      </Step>
+      <Step title="Submit the form yourself to verify capture works">
+        Enter test credentials in the form and submit. Check the log file:
+
+        ```bash
+        cat logs/<website>.log
+        ```
+
+        Replace `<website>` with the internal name of the template you selected (e.g., `facebook`, `instagram`). See the [Template reference](/reference/templates) for internal names.
+      </Step>
+      <Step title="Check ip.txt for visitor records">
+        ```bash
+        cat ip.txt
+        ```
+
+        If an IP address appears but no credentials are in the log, the visitor loaded the page but did not submit the form.
+      </Step>
+    </Steps>
+  </Accordion>
+</AccordionGroup>
+
+## Known limitations
+
+<AccordionGroup>
+  <Accordion title="Serveo is currently unavailable" icon="server">
+    Serveo (`serveo.net`) is currently down. Selecting tunnel option `3` will not produce a working public URL — the SSH connection to `serveo.net` will time out or fail.
+
+    **Alternative options:**
+
+    | Need | Recommended tunnel |
+    |------|-------------------|
+    | No account, no binary | LocalHostRun (option `5`) |
+    | Stable HTTPS URL | Ngrok (option `2`) |
+    | Custom subdomain | LocalXpose (option `4`) |
+    | Local testing only | LocalHost (option `1`) |
+
+    See [Tunneling options](/guides/tunneling-options) for a full comparison.
+  </Accordion>
+
+  <Accordion title="Tool is no longer maintained" icon="circle-alert">
+    NexPhisher is no longer actively developed. If you encounter bugs or compatibility issues not covered here, consider switching to **ZPhisher**, the successor project, which includes the same general workflow with additional templates and ongoing community support.
+  </Accordion>
+</AccordionGroup>
+
+## Verifying your setup
+
+After running the setup script, confirm the following to ensure NexPhisher will start without errors:
+
+```bash
+# Required binaries
+php --version
+curl --version
+ssh -V
+unzip -v
+
+# Required directories
+ls .htr/
+ls .Modules/
+
+# Tunnel binaries
+.htr/ngrok version
+.htr/loclx version
+```
+
+All commands should return output without errors. If any binary is missing, re-run the appropriate setup script or install the package manually as described in the sections above.

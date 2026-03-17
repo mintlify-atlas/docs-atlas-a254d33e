@@ -1,0 +1,38 @@
+---
+title: "Introduction"
+description: "NexPhisher is an advanced phishing tool for authorized security testing, featuring 30+ phishing templates and multiple tunneling options."
+---
+
+## What is NexPhisher?
+
+NexPhisher is an advanced, Bash-based phishing framework designed for authorized penetration testers and security researchers. It automates the process of deploying phishing pages for popular platforms and exposes them over the internet using tunneling services — without requiring a public server or complex network configuration.
+
+The tool ships with over 30 phishing page templates and supports 5 different tunneling methods, covering a range of operating environments from standard Linux desktops to Android devices running Termux.
+
+<Warning>
+  NexPhisher is intended **exclusively for authorized security testing** on systems and accounts you own or have explicit written permission to test. Deploying phishing pages against real users without consent is illegal in most jurisdictions. The authors and contributors bear no responsibility for misuse.
+</Warning>
+
+## Key capabilities
+
+- **30+ platform templates** — pre-built phishing pages for Facebook, Instagram, Google, Microsoft, Twitter/X, GitHub, Snapchat, Netflix, Spotify, PayPal, Steam, and many more
+- **Sub-menu variants** — platforms like Facebook and Instagram offer multiple page variants (classic login, two-factor, mobile) to increase realism
+- **5 tunneling options** — expose your locally-served page via Localhost, Ngrok, LocalXpose, LocalHostRun, or a custom option
+- **Credential capture** — captured usernames, passwords, and IP addresses are written to log files automatically
+- **Cross-platform** — runs on Linux (Debian/Ubuntu-based) and Android via Termux
+- **Single-command setup** — one command clones the repository and installs all dependencies
+
+## Deprecation notice
+
+NexPhisher is no longer actively maintained. The successor project, **ZPhisher**, is the recommended tool for new deployments. ZPhisher shares the same general workflow but includes additional templates, bug fixes, and ongoing community support.
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Install NexPhisher on Linux or Termux with all required dependencies.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Go from a fresh install to a running phishing page in minutes.
+  </Card>
+</CardGroup>

@@ -1,0 +1,106 @@
+---
+title: "Selecting a template"
+description: "Navigate the platform menu, choose a phishing template, and understand sub-menu options for platforms with multiple variants."
+---
+
+## The template menu
+
+After startup, NexPhisher displays an interactive selection menu. Enter the two-digit number next to the platform you want to use and press **Enter**.
+
+```text
+[01] Facebook    [11] Twitch      [21] DeviantArt   [99] About
+[02] Instagram   [12] Pinterest   [22] Badoo         [00] Exit
+[03] Google      [13] Snapchat    [23] Origin
+[04] Microsoft   [14] Linkedin    [24] CryptoCoin
+[05] Netflix     [15] Ebay        [25] Yahoo
+[06] Paypal      [16] Dropbox     [26] Wordpress
+[07] Steam       [17] Protonmail  [27] Yandex
+[08] Twitter     [18] Spotify     [28] StackoverFlow
+[09] Playstation [19] Reddit      [29] Vk
+[10] Github      [20] Adobe       [30] XBOX
+```
+
+## All 30 platforms
+
+| Number | Platform | Number | Platform |
+|---|---|---|---|
+| 01 | Facebook | 16 | Dropbox |
+| 02 | Instagram | 17 | Protonmail |
+| 03 | Google | 18 | Spotify |
+| 04 | Microsoft | 19 | Reddit |
+| 05 | Netflix | 20 | Adobe |
+| 06 | Paypal | 21 | DeviantArt |
+| 07 | Steam | 22 | Badoo |
+| 08 | Twitter | 23 | Origin |
+| 09 | Playstation | 24 | CryptoCoin |
+| 10 | Github | 25 | Yahoo |
+| 11 | Twitch | 26 | Wordpress |
+| 12 | Pinterest | 27 | Yandex |
+| 13 | Snapchat | 28 | StackoverFlow |
+| 14 | Linkedin | 29 | Vk |
+| 15 | Ebay | 30 | XBOX |
+
+Enter `99` to view the About screen, or `00` to exit.
+
+## Platforms with sub-menus
+
+Four platforms present a secondary menu with multiple page variants. Select the variant that best fits your testing scenario.
+
+<AccordionGroup>
+  <Accordion title="Facebook (01)">
+    ```text
+    [01] Traditional Login
+    [02] Advanced Voting Poll
+    [03] Fake Security Login
+    [04] Facebook Messenger
+    ```
+
+    | Option | Description |
+    |---|---|
+    | 01 | Standard Facebook login page |
+    | 02 | A fake voting poll that redirects to a login prompt |
+    | 03 | A fake account security warning with a login form |
+    | 04 | Facebook Messenger login page |
+  </Accordion>
+  <Accordion title="Instagram (02)">
+    ```text
+    [01] Traditional Login
+    [02] Auto Followers
+    [03] Blue Badge Verify
+    ```
+
+    | Option | Description |
+    |---|---|
+    | 01 | Standard Instagram login page |
+    | 02 | Fake "auto followers" service that requires login |
+    | 03 | Fake verified badge application that requires login |
+  </Accordion>
+  <Accordion title="Google (03)">
+    ```text
+    [01] Gmail Old Login
+    [02] Gmail New Login
+    [03] Advanced Voting Poll
+    ```
+
+    | Option | Description |
+    |---|---|
+    | 01 | Older-style Gmail sign-in page |
+    | 02 | Current-style Gmail sign-in page |
+    | 03 | A fake Google voting poll that redirects to a login prompt |
+  </Accordion>
+  <Accordion title="VK (29)">
+    ```text
+    [01] Traditional Login
+    [02] Advanced Voting Poll Login
+    ```
+
+    | Option | Description |
+    |---|---|
+    | 01 | Standard VK login page |
+    | 02 | Fake voting poll that redirects to a login prompt |
+  </Accordion>
+</AccordionGroup>
+
+## After selecting a template
+
+Once you confirm a selection (and a sub-menu option, if applicable), NexPhisher copies the corresponding template files from `.Modules/` into `.htr/www/`. The tunnel selection menu is then displayed. See [Port forwarding](/usage/port-forwarding).

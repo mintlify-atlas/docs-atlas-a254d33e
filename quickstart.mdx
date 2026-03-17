@@ -1,80 +1,97 @@
 ---
 title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+description: "Get from a fresh install to a running phishing page in a few steps."
 ---
 
-## Get started in three steps
+<Warning>
+  Only use NexPhisher on systems and accounts you own or have explicit written permission to test. Unauthorized use is illegal.
+</Warning>
 
-Get your documentation site running locally and make your first customization.
+<Steps>
+  <Step title="Clone and set up">
+    If you haven't already completed installation, clone the repository and run the setup script:
 
-### Step 1: Set up your local environment
+    ```bash
+    apt update ; apt install git -y ; git clone git://github.com/htr-tech/nexphisher.git ; cd nexphisher ; bash setup ; bash nexphisher
+    ```
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+    On Termux, replace `bash setup` with `bash tmux_setup`.
 
-### Step 2: Deploy your changes
+    See the [Installation](/installation) page for a full breakdown of what setup does.
+  </Step>
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+  <Step title="Launch NexPhisher">
+    From inside the `nexphisher/` directory, run:
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    ```bash
+    bash nexphisher
+    ```
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+    NexPhisher checks that all requirements are present (`php`, `curl`, `ssh`, `unzip`, `.htr/`, `.Modules/`) and then displays the interactive menu.
+  </Step>
 
-### Step 3: Go live
+  <Step title="Select a phishing template">
+    The main menu lists 30 platforms numbered `01` through `30`. Enter the number for the platform you want to simulate.
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+    ```
+    [01] Facebook        [11] Twitch          [21] Snapchat
+    [02] Instagram       [12] Pinterest       [22] Microsoft
+    [03] Google          [13] Tumblr          [23] Steam
+    [04] Microsoft       [14] Reddit          [24] PayPal
+    ...
+    [99] About           [00] Exit
+    ```
 
-## Next steps
+    For platforms like **Facebook**, **Instagram**, **Google**, and **VK**, a sub-menu appears with variant options (for example, classic login, two-factor prompt, or mobile layout). Select the variant you want.
+  </Step>
 
-Now that you have your docs running, explore these key features:
+  <Step title="Choose a tunneling option">
+    After selecting a template, NexPhisher presents the tunnel menu:
 
-<CardGroup cols={2}>
+    ```
+    [01] Localhost
+    [02] Ngrok
+    [03] LocalXpose
+    [04] LocalHostRun
+    [05] Custom
+    ```
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+    Select a tunnel to expose the locally-served phishing page over the internet.
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+    <Note>
+      NexPhisher serves phishing pages on `127.0.0.1` using PHP's built-in server:
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+      - **Localhost / Ngrok**: port `5555`
+      - **LocalXpose**: port `4142`
+      - **LocalHostRun**: port `4545`
+    </Note>
+  </Step>
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+  <Step title="Share the generated link">
+    Once the tunnel is established, NexPhisher prints a public URL. This is the link you share as part of your authorized test. When a target visits the URL and submits the form, their credentials are captured automatically.
+  </Step>
 
-</CardGroup>
+  <Step title="Review captured credentials">
+    Captured credentials and IP addresses are written to files inside the `logs/` directory as soon as a form submission is received.
 
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>
+    **Credential log** (username and password):
+
+    ```
+    logs/<website>.log
+    ```
+
+    For example, a Facebook template writes to `logs/facebook.log`.
+
+    **IP address log**:
+
+    ```
+    logs/ip.txt
+    ```
+
+    You can watch the log file in real time:
+
+    ```bash
+    tail -f logs/<website>.log
+    ```
+  </Step>
+</Steps>

@@ -1,0 +1,367 @@
+---
+title: "Template reference"
+description: "Complete reference for all 30+ phishing page templates in NexPhisher, including variants, internal names, and file locations."
+---
+
+NexPhisher ships with 30 platform entries covering social media, email, gaming, finance, and other services. Four platforms — Facebook, Instagram, Google, and VK — expose a sub-menu with multiple page variants.
+
+## File locations
+
+All template files are stored under `.Modules/` in the repository root. Each platform has its own subdirectory:
+
+```text
+.Modules/
+├── facebook/
+├── fb_advanced/
+├── fb_security/
+├── fb_messenger/
+├── instagram/
+├── ig_followers/
+├── ig_verify/
+├── google/
+├── google_new/
+├── google_poll/
+├── microsoft/
+├── netflix/
+├── ...
+```
+
+When you select a template, NexPhisher copies the matching subdirectory's contents into `.htr/www/`, which is the document root served by the PHP web server.
+
+## Log files
+
+Captured data is written to the `logs/` directory:
+
+| File | Contents |
+|------|----------|
+| `logs/<website>.log` | Captured credentials (username/password pairs). `<website>` matches the internal variable name listed in the tables below. |
+| `ip.txt` | IP addresses of visitors who loaded the phishing page. |
+
+For example, credentials captured by the `facebook` template are written to `logs/facebook.log`.
+
+## All templates
+
+### Social media
+
+<AccordionGroup>
+  <Accordion title="Facebook (01)" icon="square" defaultOpen={false}>
+    Facebook opens a sub-menu with four page variants.
+
+    | Sub-option | Display name | Internal name | Log file |
+    |-----------|-------------|---------------|----------|
+    | 01 | Facebook Traditional | `facebook` | `logs/facebook.log` |
+    | 02 | Facebook Voting Poll | `fb_advanced` | `logs/fb_advanced.log` |
+    | 03 | Facebook Security | `fb_security` | `logs/fb_security.log` |
+    | 04 | Facebook Messenger | `fb_messenger` | `logs/fb_messenger.log` |
+
+    Template files are located in `.Modules/facebook/`, `.Modules/fb_advanced/`, `.Modules/fb_security/`, and `.Modules/fb_messenger/`.
+  </Accordion>
+
+  <Accordion title="Instagram (02)" icon="square" defaultOpen={false}>
+    Instagram opens a sub-menu with three page variants.
+
+    | Sub-option | Display name | Internal name | Log file |
+    |-----------|-------------|---------------|----------|
+    | 01 | Instagram Traditional | `instagram` | `logs/instagram.log` |
+    | 02 | Instagram Auto Followers | `ig_followers` | `logs/ig_followers.log` |
+    | 03 | Instagram Blue Badge Verify | `ig_verify` | `logs/ig_verify.log` |
+
+    Template files are located in `.Modules/instagram/`, `.Modules/ig_followers/`, and `.Modules/ig_verify/`.
+  </Accordion>
+
+  <Accordion title="Twitter (08)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 08 | Twitter | `twitter` | `logs/twitter.log` |
+
+    Template files are located in `.Modules/twitter/`.
+  </Accordion>
+
+  <Accordion title="Pinterest (12)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 12 | Pinterest | `pinterest` | `logs/pinterest.log` |
+
+    Template files are located in `.Modules/pinterest/`.
+  </Accordion>
+
+  <Accordion title="Snapchat (13)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 13 | Snapchat | `snapchat` | `logs/snapchat.log` |
+
+    Template files are located in `.Modules/snapchat/`.
+  </Accordion>
+
+  <Accordion title="LinkedIn (14)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 14 | LinkedIn | `linkedin` | `logs/linkedin.log` |
+
+    Template files are located in `.Modules/linkedin/`.
+  </Accordion>
+
+  <Accordion title="Reddit (19)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 19 | Reddit | `reddit` | `logs/reddit.log` |
+
+    Template files are located in `.Modules/reddit/`.
+  </Accordion>
+
+  <Accordion title="Badoo (22)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 22 | Badoo | `badoo` | `logs/badoo.log` |
+
+    Template files are located in `.Modules/badoo/`.
+  </Accordion>
+
+  <Accordion title="VK (29)" icon="square" defaultOpen={false}>
+    VK opens a sub-menu with two page variants.
+
+    | Sub-option | Display name | Internal name | Log file |
+    |-----------|-------------|---------------|----------|
+    | 01 | VK Traditional | `vk` | `logs/vk.log` |
+    | 02 | VK Voting Poll | `vk_poll` | `logs/vk_poll.log` |
+
+    Template files are located in `.Modules/vk/` and `.Modules/vk_poll/`.
+  </Accordion>
+</AccordionGroup>
+
+### Email and productivity
+
+<AccordionGroup>
+  <Accordion title="Google (03)" icon="square" defaultOpen={false}>
+    Google opens a sub-menu with three page variants.
+
+    | Sub-option | Display name | Internal name | Log file |
+    |-----------|-------------|---------------|----------|
+    | 01 | Gmail Old Login | `google` | `logs/google.log` |
+    | 02 | Gmail New Login | `google_new` | `logs/google_new.log` |
+    | 03 | Gmail Voting Poll | `google_poll` | `logs/google_poll.log` |
+
+    Template files are located in `.Modules/google/`, `.Modules/google_new/`, and `.Modules/google_poll/`.
+  </Accordion>
+
+  <Accordion title="Microsoft (04)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 04 | Microsoft | `microsoft` | `logs/microsoft.log` |
+
+    Template files are located in `.Modules/microsoft/`.
+  </Accordion>
+
+  <Accordion title="ProtonMail (17)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 17 | ProtonMail | `protonmail` | `logs/protonmail.log` |
+
+    Template files are located in `.Modules/protonmail/`.
+  </Accordion>
+
+  <Accordion title="Yandex (27)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 27 | Yandex | `yandex` | `logs/yandex.log` |
+
+    Template files are located in `.Modules/yandex/`.
+  </Accordion>
+
+  <Accordion title="Yahoo (25)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 25 | Yahoo | `yahoo` | `logs/yahoo.log` |
+
+    Template files are located in `.Modules/yahoo/`.
+  </Accordion>
+
+  <Accordion title="Dropbox (16)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 16 | Dropbox | `dropbox` | `logs/dropbox.log` |
+
+    Template files are located in `.Modules/dropbox/`.
+  </Accordion>
+
+  <Accordion title="WordPress (26)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 26 | WordPress | `wordpress` | `logs/wordpress.log` |
+
+    Template files are located in `.Modules/wordpress/`.
+  </Accordion>
+
+  <Accordion title="Adobe (20)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 20 | Adobe | `adobe` | `logs/adobe.log` |
+
+    Template files are located in `.Modules/adobe/`.
+  </Accordion>
+
+  <Accordion title="Stack Overflow (28)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 28 | Stack Overflow | `stackoverflow` | `logs/stackoverflow.log` |
+
+    Template files are located in `.Modules/stackoverflow/`.
+  </Accordion>
+
+  <Accordion title="DeviantArt (21)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 21 | DeviantArt | `deviantart` | `logs/deviantart.log` |
+
+    Template files are located in `.Modules/deviantart/`.
+  </Accordion>
+</AccordionGroup>
+
+### Gaming
+
+<AccordionGroup>
+  <Accordion title="Steam (07)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 07 | Steam | `steam` | `logs/steam.log` |
+
+    Template files are located in `.Modules/steam/`.
+  </Accordion>
+
+  <Accordion title="PlayStation (09)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 09 | PlayStation | `playstation` | `logs/playstation.log` |
+
+    Template files are located in `.Modules/playstation/`.
+  </Accordion>
+
+  <Accordion title="Twitch (11)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 11 | Twitch | `twitch` | `logs/twitch.log` |
+
+    Template files are located in `.Modules/twitch/`.
+  </Accordion>
+
+  <Accordion title="Origin (23)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 23 | Origin | `origin` | `logs/origin.log` |
+
+    Template files are located in `.Modules/origin/`.
+  </Accordion>
+
+  <Accordion title="XBOX (30)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 30 | XBOX | `xbox` | `logs/xbox.log` |
+
+    Template files are located in `.Modules/xbox/`.
+  </Accordion>
+</AccordionGroup>
+
+### Finance and shopping
+
+<AccordionGroup>
+  <Accordion title="Netflix (05)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 05 | Netflix | `netflix` | `logs/netflix.log` |
+
+    Template files are located in `.Modules/netflix/`.
+  </Accordion>
+
+  <Accordion title="PayPal (06)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 06 | PayPal | `paypal` | `logs/paypal.log` |
+
+    Template files are located in `.Modules/paypal/`.
+  </Accordion>
+
+  <Accordion title="eBay (15)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 15 | eBay | `ebay` | `logs/ebay.log` |
+
+    Template files are located in `.Modules/ebay/`.
+  </Accordion>
+
+  <Accordion title="Spotify (18)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 18 | Spotify | `spotify` | `logs/spotify.log` |
+
+    Template files are located in `.Modules/spotify/`.
+  </Accordion>
+
+  <Accordion title="CryptoCoin Sniper (24)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 24 | CryptoCoin Sniper | `cryptocoinsniper` | `logs/cryptocoinsniper.log` |
+
+    Template files are located in `.Modules/cryptocoinsniper/`.
+  </Accordion>
+</AccordionGroup>
+
+### Developer tools
+
+<AccordionGroup>
+  <Accordion title="GitHub (10)" icon="square" defaultOpen={false}>
+    | Option | Display name | Internal name | Log file |
+    |--------|-------------|---------------|----------|
+    | 10 | GitHub | `github` | `logs/github.log` |
+
+    Template files are located in `.Modules/github/`.
+  </Accordion>
+</AccordionGroup>
+
+## Quick-reference table
+
+The table below lists every menu option in order with its internal variable name and log file.
+
+| Option | Platform | Internal name | Log file |
+|--------|----------|---------------|----------|
+| 01 | Facebook | sub-menu | — |
+| 01 › 01 | Facebook Traditional | `facebook` | `logs/facebook.log` |
+| 01 › 02 | Facebook Voting Poll | `fb_advanced` | `logs/fb_advanced.log` |
+| 01 › 03 | Facebook Security | `fb_security` | `logs/fb_security.log` |
+| 01 › 04 | Facebook Messenger | `fb_messenger` | `logs/fb_messenger.log` |
+| 02 | Instagram | sub-menu | — |
+| 02 › 01 | Instagram Traditional | `instagram` | `logs/instagram.log` |
+| 02 › 02 | Instagram Auto Followers | `ig_followers` | `logs/ig_followers.log` |
+| 02 › 03 | Instagram Blue Badge Verify | `ig_verify` | `logs/ig_verify.log` |
+| 03 | Google | sub-menu | — |
+| 03 › 01 | Gmail Old Login | `google` | `logs/google.log` |
+| 03 › 02 | Gmail New Login | `google_new` | `logs/google_new.log` |
+| 03 › 03 | Gmail Voting Poll | `google_poll` | `logs/google_poll.log` |
+| 04 | Microsoft | `microsoft` | `logs/microsoft.log` |
+| 05 | Netflix | `netflix` | `logs/netflix.log` |
+| 06 | PayPal | `paypal` | `logs/paypal.log` |
+| 07 | Steam | `steam` | `logs/steam.log` |
+| 08 | Twitter | `twitter` | `logs/twitter.log` |
+| 09 | PlayStation | `playstation` | `logs/playstation.log` |
+| 10 | GitHub | `github` | `logs/github.log` |
+| 11 | Twitch | `twitch` | `logs/twitch.log` |
+| 12 | Pinterest | `pinterest` | `logs/pinterest.log` |
+| 13 | Snapchat | `snapchat` | `logs/snapchat.log` |
+| 14 | LinkedIn | `linkedin` | `logs/linkedin.log` |
+| 15 | eBay | `ebay` | `logs/ebay.log` |
+| 16 | Dropbox | `dropbox` | `logs/dropbox.log` |
+| 17 | ProtonMail | `protonmail` | `logs/protonmail.log` |
+| 18 | Spotify | `spotify` | `logs/spotify.log` |
+| 19 | Reddit | `reddit` | `logs/reddit.log` |
+| 20 | Adobe | `adobe` | `logs/adobe.log` |
+| 21 | DeviantArt | `deviantart` | `logs/deviantart.log` |
+| 22 | Badoo | `badoo` | `logs/badoo.log` |
+| 23 | Origin | `origin` | `logs/origin.log` |
+| 24 | CryptoCoin Sniper | `cryptocoinsniper` | `logs/cryptocoinsniper.log` |
+| 25 | Yahoo | `yahoo` | `logs/yahoo.log` |
+| 26 | WordPress | `wordpress` | `logs/wordpress.log` |
+| 27 | Yandex | `yandex` | `logs/yandex.log` |
+| 28 | Stack Overflow | `stackoverflow` | `logs/stackoverflow.log` |
+| 29 | VK | sub-menu | — |
+| 29 › 01 | VK Traditional | `vk` | `logs/vk.log` |
+| 29 › 02 | VK Voting Poll | `vk_poll` | `logs/vk_poll.log` |
+| 30 | XBOX | `xbox` | `logs/xbox.log` |

@@ -1,0 +1,142 @@
+---
+title: "Termux Setup"
+description: "Install and configure NexPhisher on Android using the Termux terminal emulator."
+---
+
+NexPhisher can run on Android devices through [Termux](https://termux.dev), a terminal emulator and Linux environment for Android. The `tmux_setup` script handles all dependency installation and binary setup.
+
+## Prerequisites
+
+- **Termux** installed on your Android device
+- Storage permission granted to Termux
+- An active internet connection
+
+<Tip>
+  Install Termux from [F-Droid](https://f-droid.org/en/packages/com.termux/) rather than the Google Play Store. The Play Store version no longer receives updates and may be missing packages or have broken repositories. The F-Droid version is actively maintained.
+</Tip>
+
+<Warning>
+  Some features that interact with device storage require storage permission. Before running NexPhisher, grant storage access inside Termux:
+
+  ```bash
+  termux-setup-storage
+  ```
+
+  A permission dialog will appear. Tap **Allow**.
+</Warning>
+
+## Installation
+
+<Steps>
+  <Step title="Install git and clone the repository">
+    Open Termux and run:
+
+    ```bash
+    apt install git -y
+    git clone https://github.com/htr-tech/nexphisher.git
+    cd nexphisher
+    ```
+  </Step>
+
+  <Step title="Run the Termux setup script">
+    ```bash
+    bash tmux_setup
+    ```
+
+    The script displays the NexPhisher banner, then begins updating and installing packages.
+  </Step>
+
+  <Step title="Wait for packages to install">
+    The script runs the following commands in order:
+
+    ```bash
+    apt update
+    apt upgrade -y
+    apt install curl -y
+    apt install openssh -y
+    apt install php -y
+    apt install unzip -y
+    ```
+
+    | Package | Purpose |
+    | --- | --- |
+    | `curl` | Fetches URLs; used to poll the Ngrok API for the public tunnel URL |
+    | `openssh` | SSH client for Serveo and LocalHostRun tunnels (Termux uses `openssh`, not `openssh-server`) |
+    | `php` | Serves phishing pages locally via the built-in PHP web server |
+    | `unzip` | Extracts the Ngrok and LocalXpose binaries |
+
+    <Note>
+      The Termux setup script uses `apt` (not `apt-get`) and installs `openssh` instead of `openssh-server`. This is the correct package for Termux's environment. Do not substitute `openssh-server`; it is not available in Termux repositories.
+    </Note>
+
+    After packages are installed, the script:
+    - Creates the `.htr/` directory (stores tunneling binaries)
+    - Creates the `logs/` directory (stores captured credentials)
+    - Extracts `Modules.zip` into `.Modules/` (phishing page templates)
+    - Downloads and installs `ngrok` for your architecture
+    - Downloads and installs `loclx` (LocalXpose) for your architecture
+    - Writes the Serveo host key to `~/.ssh/known_hosts`
+    - Makes the `nexphisher` script executable
+
+    When complete, you will see:
+
+    ```text
+    Installation Completed !!
+    ```
+  </Step>
+
+  <Step title="Launch NexPhisher">
+    ```bash
+    bash nexphisher
+    ```
+  </Step>
+</Steps>
+
+## Differences from the Linux setup
+
+The Termux setup script (`tmux_setup`) differs from the Linux setup script (`setup`) in the following ways:
+
+| Aspect | Linux (`setup`) | Termux (`tmux_setup`) |
+| --- | --- | --- |
+| Package manager | `apt-get` | `apt` |
+| SSH package | `openssh-server` | `openssh` |
+| Requires sudo | Yes | No (Termux runs as user) |
+| Repository update | Not run | `apt update && apt upgrade -y` |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="apt: command not found">
+    Termux uses `apt` as its package manager. If the command is not found, your Termux installation may be corrupted. Reinstall Termux from F-Droid.
+  </Accordion>
+
+  <Accordion title="Unable to locate package php">
+    Your Termux package repositories may be outdated or pointing to a deprecated mirror. Update them:
+
+    ```bash
+    apt update
+    termux-change-repo
+    ```
+
+    Select a mirror from the interactive menu, then re-run `apt update` and retry the setup.
+  </Accordion>
+
+  <Accordion title="Permission denied when running nexphisher">
+    The setup script sets the executable bit on `nexphisher`. If it was not set, do it manually:
+
+    ```bash
+    chmod +x nexphisher
+    bash nexphisher
+    ```
+  </Accordion>
+
+  <Accordion title="ngrok or loclx fails to run">
+    Termux on some devices may download the wrong architecture binary. Check your device architecture:
+
+    ```bash
+    uname -m
+    ```
+
+    If `uname -m` returns `aarch64` or `armv7l`, the ARM binary should have been selected. Re-running `bash tmux_setup` will re-download the binaries.
+  </Accordion>
+</AccordionGroup>

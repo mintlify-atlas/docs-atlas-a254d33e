@@ -1,97 +1,112 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "NexPhisher"
+description: "Advanced phishing tool with 30+ login page templates and multiple port forwarding options for Linux and Termux."
 ---
 
-## Setting up
-
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Quick Installation" icon="terminal" href="/installation">
+    Get NexPhisher running on Linux or Termux in minutes with a single command.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Launch your first phishing simulation in just a few steps.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Templates" icon="browser" href="/reference/templates">
+    Browse all 30+ phishing page templates across popular platforms.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Tunneling Options" icon="network-wired" href="/guides/tunneling-options">
+    Configure Ngrok, Serveo, LocalXpose, or LocalHostRun for remote access.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## What is NexPhisher?
 
-Everything you need to create world-class documentation.
+NexPhisher is a Bash-based advanced phishing tool designed for security researchers and penetration testers. It provides realistic login page replicas for over 30 popular platforms, combined with flexible port forwarding options to deliver phishing URLs via external tunneling services.
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+<Warning>
+  NexPhisher is intended strictly for authorized security testing and educational purposes only. Unauthorized use against systems or individuals without explicit permission is illegal and unethical. Always obtain written authorization before conducting any security tests.
+</Warning>
 
-## Need inspiration?
+<Note>
+  This project is no longer actively maintained. The successor project is [ZPhisher](https://github.com/htr-tech/zphisher), which includes updated templates and additional features.
+</Note>
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="30+ Phishing Templates" icon="clone">
+    Realistic login pages for Facebook, Instagram, Google, Microsoft, Netflix, PayPal, Steam, Twitter, and many more platforms.
+  </Card>
+  <Card title="Multiple Tunnel Options" icon="share-nodes">
+    5 port forwarding methods: LocalHost, Ngrok, Serveo, LocalXpose, and LocalHostRun for flexible URL delivery.
+  </Card>
+  <Card title="Credential Capture" icon="key">
+    Automatically captures submitted usernames and passwords, saving them to log files for later review.
+  </Card>
+  <Card title="IP Logging" icon="location-dot">
+    Records the victim's IP address when they visit the phishing page.
+  </Card>
+  <Card title="Multi-Platform Support" icon="mobile">
+    Runs on both Linux (using apt) and Android/Termux environments with separate setup scripts.
+  </Card>
+  <Card title="Custom Subdomains" icon="link">
+    Generate custom subdomains for Serveo and LocalXpose tunnels to make URLs more convincing.
+  </Card>
+</CardGroup>
+
+## Supported Platforms
+
+NexPhisher includes phishing page templates for the following platforms:
+
+| # | Platform | Variants |
+|---|----------|---------|
+| 01 | Facebook | Traditional, Voting Poll, Security, Messenger |
+| 02 | Instagram | Traditional, Auto Followers, Blue Badge Verify |
+| 03 | Google/Gmail | Old Login, New Login, Voting Poll |
+| 04 | Microsoft | Standard |
+| 05 | Netflix | Standard |
+| 06 | PayPal | Standard |
+| 07 | Steam | Standard |
+| 08 | Twitter | Standard |
+| 09 | PlayStation | Standard |
+| 10 | GitHub | Standard |
+| 11 | Twitch | Standard |
+| 12 | Pinterest | Standard |
+| 13 | Snapchat | Standard |
+| 14 | LinkedIn | Standard |
+| 15 | eBay | Standard |
+| 16 | Dropbox | Standard |
+| 17 | ProtonMail | Standard |
+| 18 | Spotify | Standard |
+| 19 | Reddit | Standard |
+| 20 | Adobe | Standard |
+| 21 | DeviantArt | Standard |
+| 22 | Badoo | Standard |
+| 23 | Origin | Standard |
+| 24 | CryptoCoin Sniper | Standard |
+| 25 | Yahoo | Standard |
+| 26 | WordPress | Standard |
+| 27 | Yandex | Standard |
+| 28 | Stack Overflow | Standard |
+| 29 | VK | Traditional, Voting Poll |
+| 30 | XBOX | Standard |
+
+## Getting Started
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone git://github.com/htr-tech/nexphisher.git
+    cd nexphisher
+    ```
+  </Step>
+  <Step title="Run the setup script">
+    On Linux: `bash setup` — On Termux: `bash tmux_setup`
+  </Step>
+  <Step title="Launch NexPhisher">
+    ```bash
+    bash nexphisher
+    ```
+  </Step>
+</Steps>
+
+See the [Installation guide](/installation) for detailed instructions, or jump straight to the [Quickstart](/quickstart).

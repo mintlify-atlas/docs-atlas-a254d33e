@@ -1,0 +1,175 @@
+---
+title: "Port forwarding"
+description: "Choose a tunneling method to expose your phishing page over the internet. NexPhisher supports five options: Localhost, Ngrok, Serveo, LocalXpose, and LocalHostRun."
+---
+
+## The tunnel menu
+
+After selecting a template, NexPhisher shows the tunnel selection menu:
+
+```text
+[01] LocalHost
+[02] Ngrok
+[03] Serveo [Currently Down]
+[04] LocalXpose
+[05] LocalHostRun
+```
+
+The default is **Ngrok (option 02)**. Enter the number for the tunnel you want to use and press **Enter**.
+
+<Warning>
+  **Serveo (option 03) is currently down.** Selecting it will not produce a working URL. Use Ngrok, LocalXpose, or LocalHostRun for internet-accessible links.
+</Warning>
+
+## Tunnel options
+
+<AccordionGroup>
+  <Accordion title="01 — Localhost">
+    Serves the phishing page locally only. Use this option when you are testing on the same machine or within a LAN and do not need a public URL.
+
+    **How it works:**
+
+    NexPhisher starts a PHP built-in server bound to the loopback interface:
+
+    ```bash
+    php -S 127.0.0.1:5555
+    ```
+
+    **Access URL:**
+
+    ```text
+    http://127.0.0.1:5555
+    ```
+
+    <Note>
+      This option does not create a public link. The page is only reachable from the local machine.
+    </Note>
+  </Accordion>
+
+  <Accordion title="02 — Ngrok" defaultOpen={true}>
+    Exposes the phishing page over the internet via Ngrok's reverse proxy. This is the default option.
+
+    **How it works:**
+
+    NexPhisher starts a PHP server and launches the bundled `ngrok` binary:
+
+    ```bash
+    php -S 127.0.0.1:5555
+    .htr/ngrok http 127.0.0.1:5555
+    ```
+
+    It then polls the local Ngrok API to retrieve the public tunnel URL:
+
+    ```bash
+    curl -s -N http://127.0.0.1:4040/api/tunnels
+    ```
+
+    The script waits 7 seconds for Ngrok to start before displaying the URL.
+
+    **URL format:**
+
+    ```text
+    https://<random-id>.ngrok.io
+    ```
+
+    <Tip>
+      Ngrok requires no account or configuration for basic use. The `ngrok` binary is downloaded automatically by `bash setup`.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="03 — Serveo [Currently Down]">
+    <Warning>
+      Serveo is currently down and will not produce a working tunnel URL.
+    </Warning>
+
+    When operational, Serveo used an SSH reverse tunnel to expose the page without installing any additional binary.
+
+    **How it works:**
+
+    NexPhisher prompts for a port (default: `5555`) and optionally a custom subdomain (default: `<website><RANDOM>`):
+
+    ```bash
+    ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 \
+      -R <subdomain>:80:localhost:<port> serveo.net
+    ```
+
+    The public URL is written to `.nexlink`. The script waits 7 seconds for the tunnel to establish.
+
+    **URL format (when operational):**
+
+    ```text
+    https://<subdomain>.serveo.net
+    ```
+  </Accordion>
+
+  <Accordion title="04 — LocalXpose">
+    Exposes the phishing page via the LocalXpose tunneling service using the bundled `loclx` binary.
+
+    **How it works:**
+
+    NexPhisher optionally prompts for a custom subdomain (default: `<website><RANDOM>`), then starts a PHP server and launches `loclx`:
+
+    ```bash
+    php -S 127.0.0.1:4142
+    ```
+
+    With a custom subdomain:
+
+    ```bash
+    .htr/loclx tunnel http --to :4142 --subdomain <subdomain>
+    ```
+
+    Without a custom subdomain:
+
+    ```bash
+    .htr/loclx tunnel http --to :4142
+    ```
+
+    The script waits 8 seconds for the tunnel to establish.
+
+    **URL format:**
+
+    ```text
+    https://<subdomain>.loclx.io
+    ```
+
+    <Note>
+      The `loclx` binary is downloaded automatically by `bash setup`. A LocalXpose account may be required for custom subdomain support.
+    </Note>
+  </Accordion>
+
+  <Accordion title="05 — LocalHostRun">
+    Exposes the phishing page via `localhost.run`, which uses SSH to create a tunnel without any additional binary.
+
+    **How it works:**
+
+    NexPhisher starts a PHP server and opens an SSH tunnel to `ssh.localhost.run`:
+
+    ```bash
+    php -S 127.0.0.1:4545
+    ssh -R 80:localhost:4545 ssh.localhost.run
+    ```
+
+    The public URL is extracted from the interactive SSH output.
+
+    <Tip>
+      Press `CTRL+C` to stop the SSH session. Captured credentials logged before that point are still saved and can be reviewed in the `logs/` directory.
+    </Tip>
+  </Accordion>
+</AccordionGroup>
+
+## Credential capture
+
+Regardless of which tunnel option you use, NexPhisher continuously monitors for captured data in the background via the `datafound` function. It checks for two files written by the PHP modules:
+
+| File | Contents |
+|---|---|
+| `.htr/www/ip.txt` | Victim's IP address (captured via `ip.php`) |
+| `.htr/www/usernames.txt` | Credentials in `Username: <user>\nPass: <password>` format |
+
+When credentials are found, NexPhisher:
+
+1. Prints the captured username and password to the terminal.
+2. Saves the credentials to `logs/<platform>.log`.
+3. Saves the victim IP to `ip.txt`.
+4. Deletes the source files and continues waiting for the next submission.

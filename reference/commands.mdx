@@ -1,0 +1,196 @@
+---
+title: "Command reference"
+description: "Reference for all user-facing commands, menu options, tunnel selection numbers, and the file structure created by NexPhisher."
+---
+
+## User-facing commands
+
+These are the three commands you run directly. All must be executed from the repository root directory.
+
+<AccordionGroup>
+  <Accordion title="bash setup" icon="terminal" defaultOpen={false}>
+    Installs all required dependencies on Debian/Ubuntu-based Linux systems.
+
+    ```bash
+    bash setup
+    ```
+
+    **What it does:**
+    - Updates the package list and installs `php`, `curl`, `openssh-client`, and `unzip` via `apt`
+    - Creates the `.htr/` runtime directory if it does not exist
+    - Downloads and installs the `ngrok` binary to `.htr/ngrok`
+    - Downloads and installs the `loclx` binary to `.htr/loclx`
+    - Adds the Serveo host key to `~/.ssh/known_hosts` to suppress interactive host verification
+    - Unpacks template files into `.Modules/`
+
+    **When to use:** Fresh Linux installation or after cloning the repository.
+
+    <Warning>
+      Do not run `bash setup` on Termux/Android — use `bash tmux_setup` instead.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="bash tmux_setup" icon="mobile" defaultOpen={false}>
+    Installs all required dependencies on Termux (Android).
+
+    ```bash
+    bash tmux_setup
+    ```
+
+    **What it does:**
+    - Updates Termux packages and installs `php`, `curl`, `openssh`, and `unzip` via `pkg`
+    - Creates the `.htr/` runtime directory if it does not exist
+    - Downloads and installs the `ngrok` binary to `.htr/ngrok`
+    - Downloads and installs the `loclx` binary to `.htr/loclx`
+    - Unpacks template files into `.Modules/`
+
+    **When to use:** Fresh Termux installation or after cloning the repository on Android.
+
+    <Warning>
+      Do not run `bash tmux_setup` on Linux — use `bash setup` instead.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="bash nexphisher" icon="play" defaultOpen={false}>
+    Starts the interactive NexPhisher tool.
+
+    ```bash
+    bash nexphisher
+    ```
+
+    **What it does at startup:**
+    1. Registers signal handlers for `CTRL+C` (`SIGINT`) and `SIGTSTP`
+    2. Stops any leftover `ngrok`, `php`, and `ssh` processes from a previous session
+    3. Checks that all required binaries (`php`, `curl`, `ssh`, `unzip`) and directories (`.htr/`, `.Modules/`) are present
+    4. Displays the ASCII banner
+    5. Shows the platform selection menu
+
+    **Prompts presented:**
+    - Platform selection (enter a two-digit number)
+    - Sub-menu variant selection (for Facebook, Instagram, Google, VK)
+    - Tunnel method selection (enter a single-digit number)
+    - Tunnel-specific prompts (e.g., subdomain for Serveo/LocalXpose)
+
+    **How to exit:** Enter `00` at any menu prompt, or press `CTRL+C`.
+  </Accordion>
+</AccordionGroup>
+
+## Platform menu options
+
+Enter the two-digit number at the main menu prompt. Options `99` and `00` are special.
+
+| Input | Action |
+|-------|--------|
+| `01` | Open Facebook sub-menu |
+| `02` | Open Instagram sub-menu |
+| `03` | Open Google sub-menu |
+| `04` – `28` | Select single-variant platform directly |
+| `29` | Open VK sub-menu |
+| `30` | Select XBOX |
+| `99` | Show About screen |
+| `00` | Exit the tool |
+
+For the full list of platforms and option numbers, see the [Template reference](/reference/templates).
+
+### Sub-menu options
+
+Four platforms present a secondary menu after the initial selection.
+
+**Facebook (01)**
+
+| Input | Template |
+|-------|----------|
+| `01` | Facebook Traditional |
+| `02` | Facebook Voting Poll |
+| `03` | Facebook Security |
+| `04` | Facebook Messenger |
+
+**Instagram (02)**
+
+| Input | Template |
+|-------|----------|
+| `01` | Instagram Traditional |
+| `02` | Instagram Auto Followers |
+| `03` | Instagram Blue Badge Verify |
+
+**Google (03)**
+
+| Input | Template |
+|-------|----------|
+| `01` | Gmail Old Login |
+| `02` | Gmail New Login |
+| `03` | Gmail Voting Poll |
+
+**VK (29)**
+
+| Input | Template |
+|-------|----------|
+| `01` | VK Traditional |
+| `02` | VK Voting Poll |
+
+## Tunnel selection
+
+After choosing a template, NexPhisher prompts you to select a tunneling method.
+
+| Input | Tunnel method | Local port | Public URL format |
+|-------|--------------|-----------|------------------|
+| `1` | LocalHost | 5555 | `127.0.0.1:5555` (local only) |
+| `2` | Ngrok | 5555 | `https://XXXXXXXX.ngrok.io` |
+| `3` | Serveo | 5555 | `https://<subdomain>.serveo.net` |
+| `4` | LocalXpose | 4142 | `https://XXXXXXXXXX.loclx.io` |
+| `5` | LocalHostRun | 4545 | Printed in terminal output |
+
+<Note>
+  Serveo is currently non-functional. Selecting option `3` will not produce a working public URL. See [Tunneling options](/guides/tunneling-options) for details.
+</Note>
+
+**Tunnel-specific prompts:**
+
+- **Serveo (3):** prompts for a custom subdomain
+- **LocalXpose (4):** prompts for an optional custom subdomain (leave blank to skip)
+- **LocalHost, Ngrok, LocalHostRun:** no additional prompts
+
+## File and directory structure
+
+The following paths are created or used by NexPhisher.
+
+<Tree>
+  <Tree.Folder name="nexphisher/" defaultOpen>
+    <Tree.File name="nexphisher" />
+    <Tree.File name="setup" />
+    <Tree.File name="tmux_setup" />
+    <Tree.Folder name=".htr/" defaultOpen>
+      <Tree.File name="ngrok" />
+      <Tree.File name="loclx" />
+      <Tree.Folder name="www/" defaultOpen>
+        <Tree.File name="(active template files)" />
+      </Tree.Folder>
+    </Tree.Folder>
+    <Tree.Folder name=".Modules/" defaultOpen>
+      <Tree.Folder name="facebook/" />
+      <Tree.Folder name="instagram/" />
+      <Tree.Folder name="google/" />
+      <Tree.File name="(one subdirectory per template)" />
+    </Tree.Folder>
+    <Tree.Folder name="logs/" defaultOpen>
+      <Tree.File name="facebook.log" />
+      <Tree.File name="instagram.log" />
+      <Tree.File name="(one .log file per template)" />
+      <Tree.File name="ip.txt" />
+    </Tree.Folder>
+  </Tree.Folder>
+</Tree>
+
+| Path | Description |
+|------|-------------|
+| `nexphisher` | Main Bash script. Run with `bash nexphisher`. |
+| `setup` | Linux dependency installer. Run with `bash setup`. |
+| `tmux_setup` | Termux dependency installer. Run with `bash tmux_setup`. |
+| `.htr/` | Runtime directory created by the setup scripts. |
+| `.htr/ngrok` | Ngrok binary, installed by setup. |
+| `.htr/loclx` | LocalXpose binary, installed by setup. |
+| `.htr/www/` | Document root for the PHP server. Active template files are copied here. |
+| `.Modules/` | Source template files, one subdirectory per template variant. |
+| `logs/` | Captured credential and IP log files. |
+| `logs/<website>.log` | Credential log for the named template. |
+| `ip.txt` | Visitor IP addresses. |

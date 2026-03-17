@@ -1,0 +1,144 @@
+---
+title: "Linux Setup"
+description: "Install and configure NexPhisher on Debian, Ubuntu, or Kali Linux."
+---
+
+This guide walks through setting up NexPhisher on a Debian-based Linux system. The setup script installs all required dependencies, downloads tunneling binaries, and configures the tool for immediate use.
+
+## Prerequisites
+
+<Info>
+  You need root or sudo access to install packages via `apt-get`.
+</Info>
+
+- A Debian-based distribution (Debian, Ubuntu, Kali Linux, Parrot OS)
+- `git` installed and available on your `PATH`
+- An active internet connection
+- Root or sudo privileges
+
+## Installation
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/htr-tech/nexphisher.git
+    cd nexphisher
+    ```
+  </Step>
+
+  <Step title="Run the setup script">
+    The `setup` script must be run as root. It installs all required packages and downloads the tunneling binaries.
+
+    ```bash
+    sudo bash setup
+    ```
+
+    You will see the banner followed by `Installing Packages ....` as the script runs.
+  </Step>
+
+  <Step title="Wait for installation to complete">
+    The script installs the following packages via `apt-get`:
+
+    | Package | Purpose |
+    | --- | --- |
+    | `ssh` | SSH client used by Serveo and LocalHostRun tunnels |
+    | `curl` | Fetches URLs; used to poll the Ngrok API for the public tunnel URL |
+    | `php` | Serves the phishing pages locally via the built-in PHP web server |
+    | `unzip` | Extracts the downloaded Ngrok and LocalXpose binaries |
+    | `openssh-server` | OpenSSH server package (provides the full SSH suite) |
+
+    After packages are installed, the script:
+    - Creates the `.htr/` directory (stores tunneling binaries)
+    - Creates the `logs/` directory (stores captured credentials)
+    - Extracts `Modules.zip` into the `.Modules/` directory (phishing page templates)
+    - Downloads and installs `ngrok` for your architecture
+    - Downloads and installs `loclx` (LocalXpose) for your architecture
+    - Writes the Serveo host key to `~/.ssh/known_hosts`
+    - Makes the `nexphisher` script executable
+
+    When complete, you will see:
+
+    ```text
+    Installation Completed !!
+    Type bash nexphisher to run NEXPHISHER !!
+    ```
+  </Step>
+
+  <Step title="Launch NexPhisher">
+    ```bash
+    bash nexphisher
+    ```
+  </Step>
+</Steps>
+
+## Directory structure after setup
+
+After the setup script finishes, the project directory will contain:
+
+<Tree>
+  <Tree.Folder name="nexphisher/" defaultOpen>
+    <Tree.Folder name=".htr/" defaultOpen>
+      <Tree.File name="ngrok" />
+      <Tree.File name="loclx" />
+    </Tree.Folder>
+    <Tree.Folder name=".Modules/" defaultOpen>
+      <Tree.File name="(phishing page templates)" />
+    </Tree.Folder>
+    <Tree.Folder name="logs/" defaultOpen>
+      <Tree.File name="(captured credentials stored here)" />
+    </Tree.Folder>
+    <Tree.File name="nexphisher" />
+    <Tree.File name="setup" />
+  </Tree.Folder>
+</Tree>
+
+## Verifying the installation
+
+After setup, confirm the binaries were installed correctly:
+
+```bash
+# Check that ngrok is present and executable
+.htr/ngrok version
+
+# Check that loclx is present and executable
+.htr/loclx version
+
+# Confirm nexphisher is executable
+ls -l nexphisher
+```
+
+You should see version output for both `ngrok` and `loclx`, and `nexphisher` should show execute permissions (`-rwxr-xr-x`).
+
+<Tip>
+  Kali Linux is a natural fit for running NexPhisher in a controlled security testing environment. All required packages (`php`, `curl`, `openssh-server`) are either pre-installed or available directly from the official Kali repositories, so the setup script typically completes without any dependency issues.
+</Tip>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="apt-get fails with permission denied">
+    The setup script calls `apt-get` directly. Run the script with `sudo`:
+
+    ```bash
+    sudo bash setup
+    ```
+  </Accordion>
+
+  <Accordion title="ngrok or loclx binary not found after setup">
+    The script detects your CPU architecture and downloads the matching binary. If the download failed, check your internet connection and re-run `sudo bash setup`. You can also manually verify the architecture detection:
+
+    ```bash
+    uname -m
+    # arm* = ARM binary
+    # i386 / i686 / x86_64 = x86 binary
+    ```
+  </Accordion>
+
+  <Accordion title="php: command not found when launching">
+    The `php` package installation may have failed silently. Install it manually:
+
+    ```bash
+    sudo apt-get install -y php
+    ```
+  </Accordion>
+</AccordionGroup>

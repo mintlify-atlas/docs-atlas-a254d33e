@@ -1,0 +1,186 @@
+---
+title: "Tunneling Options"
+description: "Compare and configure the five tunneling methods available in NexPhisher: LocalHost, Ngrok, Serveo, LocalXpose, and LocalHostRun."
+---
+
+NexPhisher supports five ways to expose a locally-served phishing page. Each option has different tradeoffs around availability, ease of setup, and custom subdomain support.
+
+## Comparison table
+
+| Option | Availability | Custom subdomain | URL format | Local port |
+| --- | --- | --- | --- | --- |
+| LocalHost | Always available | No | `127.0.0.1:5555` | 5555 |
+| Ngrok | Available (account required for some features) | No (free tier) | `https://XXXXXXXX.ngrok.io` | 5555 |
+| Serveo | **Currently down** | Yes | `https://<subdomain>.serveo.net` | Configurable (default 5555) |
+| LocalXpose | Available (account required) | Yes | `https://XXXXXXXXXX.loclx.io` | 4142 |
+| LocalHostRun | Available | No (random) | Shown in terminal output | 4545 |
+
+## Detailed configuration
+
+<AccordionGroup>
+  <Accordion title="1. LocalHost" icon="house">
+    LocalHost runs the PHP server locally without creating any public tunnel. The page is only accessible from the same machine.
+
+    **Internal commands:**
+
+    ```bash
+    php -S 127.0.0.1:5555
+    ```
+
+    **When to use:**
+    - Testing that a phishing template loads and renders correctly
+    - Verifying credential capture works before exposing the page publicly
+    - Demonstrations on a local network without external connectivity
+
+    **Limitations:**
+    - Not accessible from other devices
+    - Cannot be used for real phishing simulations across the internet
+  </Accordion>
+
+  <Accordion title="2. Ngrok" icon="globe">
+    Ngrok creates a secure tunnel from the public internet to your local PHP server. NexPhisher polls the local Ngrok API to retrieve the generated public URL.
+
+    **Internal commands:**
+
+    ```bash
+    php -S 127.0.0.1:5555
+    .htr/ngrok http 127.0.0.1:5555
+    ```
+
+    NexPhisher then polls the Ngrok API to get the assigned URL:
+
+    ```bash
+    curl http://127.0.0.1:4040/api/tunnels
+    ```
+
+    **URL format:** `https://XXXXXXXX.ngrok.io`
+
+    **Tunnel startup time:** 7 seconds
+
+    **When to use:**
+    - Reliable, widely-supported tunneling for general use
+    - When you need a stable HTTPS URL
+
+    **Setup notes:**
+    - The `ngrok` binary is installed to `.htr/ngrok` by the setup script
+    - A free Ngrok account is required to authenticate the binary for sustained use. Create an account at [ngrok.com](https://ngrok.com) and add your authtoken:
+
+      ```bash
+      .htr/ngrok authtoken YOUR_AUTH_TOKEN
+      ```
+
+    **Limitations:**
+    - Free tier does not support custom subdomains
+    - URL changes on every new tunnel session
+  </Accordion>
+
+  <Accordion title="3. Serveo" icon="server">
+    Serveo exposes a local port over a reverse SSH tunnel through `serveo.net`. It supports custom subdomains.
+
+    <Warning>
+      Serveo is currently down and non-functional. This option is included for reference; selecting it will not produce a working public URL.
+    </Warning>
+
+    **Internal commands:**
+
+    ```bash
+    php -S 127.0.0.1:<port>
+    ssh -o StrictHostKeyChecking=no \
+        -o ServerAliveInterval=60 \
+        -o ServerAliveCountMax=60 \
+        -R <subdomain>:80:localhost:<port> serveo.net
+    ```
+
+    **URL format:** `https://<subdomain>.serveo.net`
+
+    **Tunnel startup time:** 7 seconds
+
+    **When to use (when available):**
+    - When a memorable, predictable subdomain is needed
+    - When no additional account or binary installation is desired (uses standard SSH)
+
+    **Setup notes:**
+    - The setup script writes the Serveo host key to `~/.ssh/known_hosts` to suppress the interactive host verification prompt
+    - Port is configurable; default is 5555
+    - Subdomain is specified interactively when selecting this option
+  </Accordion>
+
+  <Accordion title="4. LocalXpose" icon="arrow-up-right">
+    LocalXpose (loclx) is a paid tunneling service that supports custom subdomains on HTTP tunnels. NexPhisher uses the `loclx` CLI installed to `.htr/loclx`.
+
+    **Internal commands (with subdomain):**
+
+    ```bash
+    php -S 127.0.0.1:4142
+    .htr/loclx tunnel http --to :4142 --subdomain <subdomain>
+    ```
+
+    **Internal commands (without subdomain):**
+
+    ```bash
+    php -S 127.0.0.1:4142
+    .htr/loclx tunnel http --to :4142
+    ```
+
+    **URL format:** `https://XXXXXXXXXX.loclx.io`
+
+    **Tunnel startup time:** 8 seconds
+
+    **When to use:**
+    - When a custom subdomain on a persistent URL is required
+    - As an alternative when Ngrok is unavailable or rate-limited
+
+    **Setup notes:**
+    - The `loclx` binary is installed to `.htr/loclx` by the setup script
+    - A LocalXpose account is required. Register at [localxpose.io](https://localxpose.io) and authenticate the binary:
+
+      ```bash
+      .htr/loclx account login
+      ```
+
+    - Custom subdomains require a paid LocalXpose plan
+  </Accordion>
+
+  <Accordion title="5. LocalHostRun" icon="terminal">
+    LocalHostRun uses a reverse SSH tunnel to `ssh.localhost.run`. No binary installation or account is required — only a standard SSH client.
+
+    **Internal commands:**
+
+    ```bash
+    php -S 127.0.0.1:4545
+    ssh -R 80:localhost:4545 ssh.localhost.run
+    ```
+
+    **URL format:** Printed to the terminal by the SSH session
+
+    **When to use:**
+    - When no additional binaries or accounts are available
+    - Quick tunneling with no setup overhead
+
+    **Notes:**
+    - Unlike Ngrok and LocalXpose, NexPhisher does not automatically extract the URL via an API. The public URL is printed in the terminal output of the SSH session.
+    - Press **Ctrl+C** to stop the tunnel and return to NexPhisher to view captured credentials.
+    - Subdomains are randomly assigned per session and cannot be customized on the free tier.
+  </Accordion>
+</AccordionGroup>
+
+## Choosing the right option
+
+<CardGroup cols={2}>
+  <Card title="Just testing locally" icon="flask">
+    Use **LocalHost**. No tunneling needed; the page is served at `127.0.0.1:5555` and accessible only on your machine.
+  </Card>
+  <Card title="Need a reliable public URL" icon="link">
+    Use **Ngrok**. It is the most widely-supported option with a stable HTTPS URL. Authenticate with an authtoken for extended sessions.
+  </Card>
+  <Card title="Need a custom subdomain" icon="tag">
+    Use **LocalXpose**. It is the only currently-working option that supports custom subdomains. Requires a paid plan.
+  </Card>
+  <Card title="No accounts or binaries" icon="key">
+    Use **LocalHostRun**. It requires only a standard SSH client and no registration. The URL is shown in terminal output.
+  </Card>
+</CardGroup>
+
+<Note>
+  Serveo is currently unavailable. If you select the Serveo option, the tunnel will not establish successfully.
+</Note>
